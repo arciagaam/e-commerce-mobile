@@ -5,9 +5,9 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import {HeaderBackButton} from '@react-navigation/elements';
 import { AuthProvider } from './src/authContext';
-
+import { useNavigation } from '@react-navigation/native';
 // AUTH PAGES
 import Login from './src/pages/auth/Login';
 import Register from './src/pages/auth/Register';
@@ -16,24 +16,39 @@ import Register from './src/pages/auth/Register';
 import Home from './src/pages/user/Home';
 import Profile from './src/pages/user/Profile';
 import Shop from './src/pages/user/Shop';
+import ShopLanding from './src/pages/user/ShopLanding';
+import Product from './src/pages/user/Product';
+
 
 const AuthStack = createNativeStackNavigator();
+const ShopStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
 
 const AuthStackScreen = () => {
   return (
-
     <AuthStack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
-
       <AuthStack.Screen name="Login" component={Login} />
       <AuthStack.Screen name="Register" component={Register} />
-
     </AuthStack.Navigator>
-
   )
+}
 
+const ShopStackScreen = () => {
+  const navigation = useNavigation();
+  return (
+    <ShopStack.Navigator initialRouteName='ShopLanding' screenOptions={{drawerActiveTintColor:'#DF687D', headerTintColor:'#DF687D', headerShadowVisible:false}}>
+      <ShopStack.Screen name="ShopLanding" component={ShopLanding} options={{headerShown:false}}/>
+      <ShopStack.Screen name="Shop" component={Shop} options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={()=>{
+        navigation.getParent('main').setOptions({headerShown:true, swipeEnabled:true})
+        navigation.navigate('ShopLanding');
+      }}/>)}}/>
+      <ShopStack.Screen name="Product" component={Product} options={{headerLeft: (props) => (<HeaderBackButton {...props} onPress={()=>{
+        navigation.navigate('Shop');
+      }}/>)}}/>
+    </ShopStack.Navigator>
+  )
 }
 
 export default function App({ navigation }) {
@@ -71,10 +86,10 @@ export default function App({ navigation }) {
   
   return (
     <AuthProvider value={authContext}>
-        <NavigationContainer>
-          <Drawer.Navigator initialRouteName="Home" options={{title:'Test'}} screenOptions={{ drawerActiveTintColor:'#DF687D', headerTintColor:'#DF687D', headerShadowVisible:false}} >
+        <NavigationContainer >
+          <Drawer.Navigator id='main' initialRouteName="Home" options={{title:'Test'}} screenOptions={{drawerActiveTintColor:'#DF687D', headerTintColor:'#DF687D', headerShadowVisible:false}} >
             <Drawer.Screen name="Home" component={Home} />
-            <Drawer.Screen name="Shop" component={Shop} />
+            <Drawer.Screen name="Shop Landing" component={ShopStackScreen} options={{title:'Shop'}}/>
 
             {state.userToken != null ? <Drawer.Screen name="Profile" component={Profile} options={{animationTypeForReplace: state.isSignout ? 'pop' : 'push',}}/> : <Drawer.Screen name="Login / Register" component={AuthStackScreen}  />}
 

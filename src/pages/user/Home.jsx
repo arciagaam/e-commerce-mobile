@@ -89,9 +89,11 @@ const Home = () => {
 const PopularProducts = ({ item, index }) => {
 
     return (
-        <View className={`flex flex-col justify-center items-center w-[200px] min-h-[200px] rounded-md overflow-hidden my-5 ${index==0 ? 'ml-[20px]' : index==DATA.length-1 ? 'mr-[20px]' : ''}`}>
-            <Image className="flex-1 h-auto w-full object-cover" source={{ uri: item.url }} />
-            <Text className="bg-accent-default text-white w-full text-center py-2">{item.title}</Text>
+        <View className={`flex flex-col justify-center items-center w-[200px] min-h-[200px] rounded-md bg-white shadow-sm my-5 ${index==0 ? 'ml-[20px]' : index==DATA.length-1 ? 'mr-[20px]' : ''}`}>
+            <Image className="bg-red-100 flex-1 h-auto w-full object-cover rounded-md" source={{ uri: item.url }} />
+            <View className="py-2 rounded-md">
+                <Text className="bg-white text-accent-dark font-bold w-full text-center ">{item.title}</Text>
+            </View>
         </View>
     )
 }
