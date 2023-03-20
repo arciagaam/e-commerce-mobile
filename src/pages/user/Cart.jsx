@@ -9,7 +9,8 @@ const _CART = {addons: [{name: "Ferrero Rocher", price: "50", quantity: 2}, {nam
 const Cart = ({ navigation }) => {
 
     const [cartItems, setCartItems] = useState([]);
-
+    const [totalPrice, setTotalPrice] = useState(0);
+    
     useEffect(() => {
         const user = auth.currentUser;
 
@@ -43,14 +44,11 @@ const Cart = ({ navigation }) => {
     }, []);
 
     const callbackCartItem = ({type, name, count, index, cartItemIndex}) => {
-        console.log(type);
         if(type == 'addon') {
             cartItems[cartItemIndex].addons[index].quantity = count;
         }else if (type == 'product') {
             cartItems[cartItemIndex].quantity = count;
-        }
-
-        console.log(cartItems[cartItemIndex].addons[index]);
+        }        
     }
 
     return (

@@ -6,14 +6,43 @@ import NumberCounter from './NumberCounter'
 const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [cartItemState, setCartItemState] = useState([])
+    const [itemTotal, setItemTotal] = useState(0);
 
     const callbackCount = ({ type, name, count, index }) => {
+        if(!callbackCartItem) return false;
+
+        console.log(index);
+        console.log(cartItem.addons);
+        let tempTotal = 0;
+
         if (type == 'addon') {
+            Promise.all([
+                setItemTotal(0),
+                setItemTotal((prevTotal) => (prevTotal + (parseInt(cartItem.pricing) * parseInt(cartItem.quantity)))),
+                cartItem.addons.forEach((addon, _index) => {
+                    if(_index == index) {
+                        tempTotal = tempTotal + (parseInt(addon.price) * count)
+                    }else{
+                        tempTotal = tempTotal + (parseInt(addon.price) * parseInt(addon.quantity))
+                    }
+                }),
+                setItemTotal((prevTotal)=>(prevTotal + tempTotal))
+            ]);
+
             callbackCartItem({type, name, count, index, cartItemIndex});
         }else if (type == 'product') {
+            Promise.all([
+                setItemTotal(0),
+                setItemTotal((prevTotal) => (prevTotal + (parseInt(cartItem.pricing) * count))),
+                cartItem.addons.forEach((addon, _index) => {
+                    tempTotal = tempTotal + (parseInt(addon.price) * parseInt(addon.quantity))
+                }),
+                setItemTotal((prevTotal)=>(prevTotal + tempTotal))
+            ]);
+
             callbackCartItem({type, name, count, cartItemIndex});
         }
+        console.log(itemTotal)
     }
 
     return (
@@ -27,6 +56,7 @@ const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
 
                 <View className="flex flex-col">
                     <NumberCounter callbackCount={callbackCount} initialValue={cartItem.quantity} type={'product'} />
+                    <Text>{itemTotal}</Text>
                 </View>
             </View>
 
