@@ -10,9 +10,6 @@ const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
 
     const callbackCount = ({ type, name, count, index }) => {
         if(!callbackCartItem) return false;
-
-        console.log(index);
-        console.log(cartItem.addons);
         let tempTotal = 0;
 
         if (type == 'addon') {
@@ -21,9 +18,9 @@ const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
                 setItemTotal((prevTotal) => (prevTotal + (parseInt(cartItem.pricing) * parseInt(cartItem.quantity)))),
                 cartItem.addons.forEach((addon, _index) => {
                     if(_index == index) {
-                        tempTotal = tempTotal + (parseInt(addon.price) * count)
+                        tempTotal = tempTotal + ((parseInt(addon.price) * count) * cartItem.quantity)
                     }else{
-                        tempTotal = tempTotal + (parseInt(addon.price) * parseInt(addon.quantity))
+                        tempTotal = tempTotal + ((parseInt(addon.price) * parseInt(addon.quantity)) * cartItem.quantity)
                     }
                 }),
                 setItemTotal((prevTotal)=>(prevTotal + tempTotal))
@@ -35,14 +32,14 @@ const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
                 setItemTotal(0),
                 setItemTotal((prevTotal) => (prevTotal + (parseInt(cartItem.pricing) * count))),
                 cartItem.addons.forEach((addon, _index) => {
-                    tempTotal = tempTotal + (parseInt(addon.price) * parseInt(addon.quantity))
+                    tempTotal = tempTotal + ((parseInt(addon.price) * parseInt(addon.quantity)) * count)
                 }),
                 setItemTotal((prevTotal)=>(prevTotal + tempTotal))
             ]);
 
             callbackCartItem({type, name, count, cartItemIndex});
         }
-        console.log(itemTotal)
+
     }
 
     return (

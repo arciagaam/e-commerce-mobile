@@ -48,7 +48,26 @@ const Cart = ({ navigation }) => {
             cartItems[cartItemIndex].addons[index].quantity = count;
         }else if (type == 'product') {
             cartItems[cartItemIndex].quantity = count;
-        }        
+        }      
+        
+        let tempProductTotal = 0; 
+        let tempAddOnsTotal = 0;
+
+        cartItems.forEach(cartItem => {
+            let tempPerProduct = 0;
+            let tempAddOnsPerProduct = 0;
+            tempPerProduct = tempPerProduct + (parseInt(cartItem.pricing) * parseInt(cartItem.quantity));
+
+            for(const addon of cartItem.addons) {
+                tempAddOnsPerProduct = tempAddOnsPerProduct + (parseInt(addon.quantity) * parseInt(addon.price));
+            }
+            
+            tempProductTotal = tempProductTotal + tempPerProduct;
+            tempAddOnsTotal = tempAddOnsTotal + tempAddOnsPerProduct * cartItem.quantity;
+
+        });
+
+        setTotalPrice(tempProductTotal + tempAddOnsTotal);
     }
 
     return (
@@ -60,6 +79,8 @@ const Cart = ({ navigation }) => {
                 <CartItemAccordion key={index} cartItem={cartItem} callbackCartItem={callbackCartItem} cartItemIndex={index}/>
 
             ))}
+
+            <Text>{totalPrice}</Text>
 
 
         </ScrollView>

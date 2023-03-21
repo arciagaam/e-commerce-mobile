@@ -96,8 +96,6 @@ const Product = ({ route, navigation }) => {
 
   }, [])
 
-  // console.log(orderDetails)
-
   return (
 
     loading ? <Text>Loading</Text> :
