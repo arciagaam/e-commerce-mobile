@@ -19,22 +19,22 @@ const ShopLanding = ({ navigation }) => {
     ]
 
     useEffect(() => {
-        // const getData = async () => {
-        //     const dbRef = collection(db, 'collections');
-        //     const docSnap = await getDocs(dbRef);
+        const getData = async () => {
+            const dbRef = collection(db, 'collections');
+            const docSnap = await getDocs(dbRef);
 
-        //     let temp = [];
+            let temp = [];
 
-        //     docSnap.forEach(snap => {
-        //         temp.push({...snap.data(), id:snap.id})
-        //     })
+            docSnap.forEach(snap => {
+                temp.push({...snap.data(), id:snap.id})
+            })
 
-        //     setCollections(temp);
-        //     setLoading(false);
-        // }
-        // getData();
+            setCollections(temp);
+            setLoading(false);
+        }
+        getData();
 
-        setCollections(_DATA);
+        // setCollections(_DATA);
         setLoading(false);
     }, [])
 

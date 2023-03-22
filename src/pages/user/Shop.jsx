@@ -18,25 +18,25 @@ const Shop = ({navigation, route}) => {
 
 
   useEffect(() => {
-    // const {collection_id} = route.params;
-    const collection_id = 'DOeo6J1rGG9JeD7fT2G6';
+    const {collection_id} = route.params;
+    // const collection_id = 'DOeo6J1rGG9JeD7fT2G6';
 
-    // const getData = async () => {
-    //   const docRef = collection(db, 'products');
-    //   const q = query(docRef, where('collection', '==', collection_id));
-    //   const snapQuery = await getDocs(q);
+    const getData = async () => {
+      const docRef = collection(db, 'products');
+      const q = query(docRef, where('collection', '==', collection_id));
+      const snapQuery = await getDocs(q);
 
-    //   const temp = [];
-    //   snapQuery.forEach(snap => {
-    //     temp.push({...snap.data(), id:snap.id})
-    //   });
+      const temp = [];
+      snapQuery.forEach(snap => {
+        temp.push({...snap.data(), id:snap.id})
+      });
 
-    //   setProducts(temp);
-    // }
+      setProducts(temp);
+    }
 
-    setProducts(_DATA);
+    // setProducts(_DATA);
+    getData();
     navigation.getParent('main').setOptions({swipeEnabled:false, headerShown:false})
-    // getData();
   }, [])
 
   return (

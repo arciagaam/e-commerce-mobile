@@ -13,16 +13,16 @@ const _DATA = {
   pricing: '220'
 }
 
-const _COLLECTIONDATA = { addons: [{ name: "Ferrero Rocher", price: "50" }, { name: "Kitkat", price: "20" }, { name: "Hany", price: "10" }], description: "description for dried flowers bouquet", id: "1cR5CvC5TnfEaoFI9lAu", title: "Dried Flowers Bouquet" }
+const _COLLECTIONDATA = { add_ons: [{ name: "Ferrero Rocher", price: "50" }, { name: "Kitkat", price: "20" }, { name: "Hany", price: "10" }], description: "description for dried flowers bouquet", id: "1cR5CvC5TnfEaoFI9lAu", title: "Dried Flowers Bouquet" }
 
 const Product = ({ route, navigation }) => {
 
   const [product, setProduct] = useState({});
-  const [collectionData, setCollectionData] = useState({});
+  const [collectionData, setCollectionData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [cbCounter, setCbCounter] = useState(0);
-  const orderDetails = useRef({});
+  const [orderDetails, setOrderDetails] = useState({});
 
   const handleAddToCart = async () => {
     
@@ -44,7 +44,6 @@ const Product = ({ route, navigation }) => {
 
   const callbackCount = ({type, name, count}) => {
     if(!orderDetails.addons) return false;
-
     if(type == 'addon') {
       orderDetails?.addons.forEach(addon => {
         if(name == addon.name){
@@ -52,57 +51,52 @@ const Product = ({ route, navigation }) => {
         }
       })
     }else if(type == 'product') {
-      // DITO PAPASOK LOGIC KAPAG QUANTITY PINALITAN
-      // stateDATA.quantity = count;
+
     }
   }
 
   useEffect(() => {
-    // const { product_id } = route.params;
-    const product_id = '1UuNzCwqKIrHqpjsAICj';
+    const { product_id } = route.params;
+    // const product_id = '1UuNzCwqKIrHqpjsAICj';
     const getProductData = async () => {
 
-      // const docRef = doc(db, 'products', product_id);
-      // const docSnap = await getDoc(docRef);
+      const docRef = doc(db, 'products', product_id);
+      const docSnap = await getDoc(docRef);
 
-      // if (docSnap.exists()) {
-      //   setProduct({...docSnap.data(), id:docSnap.id});
-      // }
-      setProduct(_DATA);
+      if(docSnap.exists()) setProduct({...docSnap.data(), id:docSnap.id});
+
+      // setProduct(_DATA);
       orderDetails['product_id'] = product_id;
-      orderDetails['quantity'] = 0;
+      orderDetails['quantity'] = 1;
+
+      getCollectionData(docSnap.data());
     };
 
-    const getCollectionData = async () => {
-      // if(product.collection!=null && product.collection!=''){
-      //   const docRef = doc(db, 'collections', product.collection);
-      //   const docSnap = await getDoc(docRef);
+    const getCollectionData = async (productData) => {
+      
+      if(productData.collection!=null && productData.collection!=''){
+        const docRef = doc(db, 'collections', productData.collection);
+        const docSnap = await getDoc(docRef);
+        
+        setCollectionData({...docSnap.data(), id:docSnap.id});
 
-      //   if (docSnap.exists()) {
-      //     setCollectionData({...docSnap.data(), id:docSnap.id});
-      //   }
-      // }
+        const temp = [];
+        docSnap.data().addons.forEach(addon => {temp.push({...addon, quantity:0})})
+        orderDetails['add_ons'] = temp;
+      }
+      setLoading(false);
+    };
 
-      setCollectionData(_COLLECTIONDATA)
-
-      const temp = [];
-
-      _COLLECTIONDATA.addons.forEach(addon => {temp.push({...addon, quantity:0})})
-      orderDetails['addons'] = temp;
-    }
-
-
-    Promise.all([getProductData(), getCollectionData(), setLoading(false)])
+    getProductData();
 
   }, [])
-
   return (
 
     loading ? <Text>Loading</Text> :
 
       <ScrollView className="flex flex-1 bg-white">
 
-        <Image className="w-full aspect-square rounded-md shadow-md bg-white" source={{ uri: product.images[0].url }} />
+        {/* <Image className="w-full aspect-square rounded-md shadow-md bg-white" source={{ uri: product.images[0].url }} /> */}
 
         <View className="flex flex-col px-5 py-2 pb-5">
 

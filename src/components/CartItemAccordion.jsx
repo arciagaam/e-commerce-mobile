@@ -16,7 +16,7 @@ const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
             Promise.all([
                 setItemTotal(0),
                 setItemTotal((prevTotal) => (prevTotal + (parseInt(cartItem.pricing) * parseInt(cartItem.quantity)))),
-                cartItem.addons.forEach((addon, _index) => {
+                cartItem.add_ons.forEach((addon, _index) => {
                     if(_index == index) {
                         tempTotal = tempTotal + ((parseInt(addon.price) * count) * cartItem.quantity)
                     }else{
@@ -31,7 +31,7 @@ const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
             Promise.all([
                 setItemTotal(0),
                 setItemTotal((prevTotal) => (prevTotal + (parseInt(cartItem.pricing) * count))),
-                cartItem.addons.forEach((addon, _index) => {
+                cartItem.add_ons.forEach((addon, _index) => {
                     tempTotal = tempTotal + ((parseInt(addon.price) * parseInt(addon.quantity)) * count)
                 }),
                 setItemTotal((prevTotal)=>(prevTotal + tempTotal))
@@ -63,7 +63,7 @@ const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
                     <Text>Inclusions: </Text>
 
                     <Text>Add-ons:</Text>
-                    {cartItem.addons && cartItem.addons.map((addon, index) => (
+                    {cartItem.add_ons && cartItem.add_ons.map((addon, index) => (
                         <NumberCounter key={index} callbackCount={callbackCount} label={addon.name} initialValue={addon.quantity} index={index} type={'addon'} />
                     ))}
                 </View>
