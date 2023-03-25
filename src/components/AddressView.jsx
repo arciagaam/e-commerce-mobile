@@ -69,7 +69,7 @@ const AddressView = ({ address, index, limit, callbackAddresses, userData }) => 
                         </TouchableOpacity>
 
                         <TouchableOpacity className="py-1 self-end" onPress={()=>{handleDefaults({type:'billing'})}}>
-                            <Text className="text-base">{userData.default_shipping == index ? 'Current Default Billing' : 'Set as Default Billing'}</Text>
+                            <Text className="text-base">{userData.default_billing == index ? 'Current Default Billing' : 'Set as Default Billing'}</Text>
                         </TouchableOpacity>
                     </View>
 

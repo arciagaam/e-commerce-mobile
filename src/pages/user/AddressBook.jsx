@@ -105,7 +105,6 @@ const AddressBook = ({ navigation }) => {
           </View>
         </View>
 
-
         <View className="bg-white shadow-md px-5 py-3 rounded-lg mb-5">
           <Text className="text-accent-dark text-3xl font-bold mb-5">Addresses</Text>
 
