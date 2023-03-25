@@ -24,7 +24,7 @@ import Cart from './src/pages/user/Cart';
 import Checkout from './src/pages/user/Checkout';
 import Account from './src/pages/user/Account';
 import AddressBook from './src/pages/user/AddressBook';
-
+import AddAddress from './src/pages/user/AddAddress';
 // LOGO
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -33,6 +33,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 const AuthStack = createNativeStackNavigator();
 const ShopStack = createNativeStackNavigator();
 const CartStack = createNativeStackNavigator();
+const AddressStack = createNativeStackNavigator();
 const ProfileTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -76,6 +77,15 @@ const CartStackScreen = () => {
   )
 }
 
+const AddressStackScreen = () => {
+  return (
+    <AddressStack.Navigator initialRouteName='Address' screenOptions={{headerShown:false}}>
+      <AddressStack.Screen name='Address' component={AddressBook} />
+      <AddressStack.Screen name='AddAddress' component={AddAddress} />
+    </AddressStack.Navigator>
+  )
+}
+
 const ProfileTabScreen = () => {
   return (
     <ProfileTab.Navigator initialRouteName='Account'
@@ -87,7 +97,7 @@ const ProfileTabScreen = () => {
           if (route.name == 'Account') {
             iconName = 'user-cog';
             
-          } else if (route.name == 'Address') {
+          } else if (route.name == 'AddressStack') {
             iconName = 'address-book';
           }
           return <FontAwesome5 name={iconName} size={size} color={color} solid/>
@@ -100,7 +110,7 @@ const ProfileTabScreen = () => {
 
     >
       <ProfileTab.Screen name='Account' component={Account} />
-      <ProfileTab.Screen name='Address' component={AddressBook} />
+      <ProfileTab.Screen name='AddressStack' options={{title:'Address Book'}} component={AddressStackScreen} />
     </ProfileTab.Navigator>
   )
 }
