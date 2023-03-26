@@ -45,21 +45,21 @@ const CartItemAccordion = ({ cartItem, cartItemIndex, callbackCartItem }) => {
     return (
         <View className="bg-white flex flex-col border-b border-accent-light pt-5">
 
-            <View className="flex flex-row items-start justify-between">
+            <View className="flex flex-row items-start justify-between mb-2">
                 <View className="flex flex-col pl-5">
-                    <Text className="text-accent-dark font-bold text-2xl">Product Name</Text>
-                    <Text className="text-accent-dark text-xl">Product Price</Text>
+                    <Text className="text-accent-dark font-bold text-2xl">{cartItem.name}</Text>
+                    <Text className="text-accent-dark text-xl">₱ {cartItem.pricing}</Text>
                 </View>
 
                 <View className="flex flex-col">
                     <NumberCounter callbackCount={callbackCount} initialValue={cartItem.quantity} type={'product'} />
-                    <Text>{itemTotal}</Text>
+                    <Text className="text-lg text-accent-dark">Item total: ₱ {itemTotal}</Text>
                 </View>
             </View>
 
             <View className="bg-white flex flex-col overflow-hidden">
                 <View className={`bg-white flex flex-col pl-5 ${isOpen ? 'max-h[calc(100%)]' : 'max-h-0'}`}>
-                    <Text>Product Description Here</Text>
+                    <Text>{cartItem.description}</Text>
                     <Text>Inclusions: </Text>
 
                     <Text>Add-ons:</Text>

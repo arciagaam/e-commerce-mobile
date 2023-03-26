@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HeaderBackButton } from '@react-navigation/elements';
 import { AuthProvider } from './src/authContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import { auth } from './src/firebase';
 
 
@@ -25,10 +25,9 @@ import Checkout from './src/pages/user/Checkout';
 import Account from './src/pages/user/Account';
 import AddressBook from './src/pages/user/AddressBook';
 import AddAddress from './src/pages/user/AddAddress';
+
 // LOGO
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-
 
 const AuthStack = createNativeStackNavigator();
 const ShopStack = createNativeStackNavigator();
@@ -36,7 +35,6 @@ const CartStack = createNativeStackNavigator();
 const AddressStack = createNativeStackNavigator();
 const ProfileTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
-
 
 
 const AuthStackScreen = () => {
@@ -72,7 +70,7 @@ const CartStackScreen = () => {
   return (
     <CartStack.Navigator>
       <CartStack.Screen name="Cart" component={Cart} options={{ headerShown: false }} />
-      <CartStack.Screen name="Checkout" component={Checkout} />
+      <CartStack.Screen name="Checkout" component={Checkout} options={{ headerShown: false }}/>
     </CartStack.Navigator>
   )
 }
@@ -155,11 +153,11 @@ export default function App({ navigation }) {
   return (
     <AuthProvider value={authContext}>
       <NavigationContainer >
-        <Drawer.Navigator id='main' initialRouteName="Home" screenOptions={({ navigation }) => ({ drawerActiveTintColor: '#DF687D', headerTintColor: '#DF687D', headerShadowVisible: false, headerRight: () => { if (state.userToken != null) return (<TouchableOpacity onPress={() => { navigation.navigate('Cart') }} className="mr-4"><Text className="text-accent-default font-bold">Cart</Text></TouchableOpacity>) } })} >
+        <Drawer.Navigator id='main' initialRouteName="Home" screenOptions={({ navigation }) => ({ drawerActiveTintColor: '#DF687D', headerTintColor: '#DF687D', headerShadowVisible: false, headerRight: () => { if (state.userToken != null) return (<TouchableOpacity onPress={() => {navigation.dispatch(CommonActions.reset({index:0, routes:[{name:'CartStack'}]}))}} className="mr-4"><Text className="text-accent-default font-bold">Cart</Text></TouchableOpacity>) } })} >
           <Drawer.Screen name="Home" component={Home} />
           <Drawer.Screen name="Shop Landing" component={ShopStackScreen} options={{ title: 'Shop' }} />
           {state.userToken != null ? <Drawer.Screen name="ProfileTab" component={ProfileTabScreen} options={{ title: 'Profile', animationTypeForReplace: state.isSignout ? 'pop' : 'push', }} /> : <Drawer.Screen name="Authentication" options={{ title: 'Login / Register' }} component={AuthStackScreen} />}
-          <Drawer.Screen name="Cart" component={CartStackScreen} options={{ drawerItemStyle: { height: 0 }, headerTitle: '' }} />
+          <Drawer.Screen name="CartStack"  component={CartStackScreen} options={{ title:'Cart', drawerItemStyle: { height: 0 }, headerTitle: '' }} />
         </Drawer.Navigator>
       </NavigationContainer>
     </AuthProvider>

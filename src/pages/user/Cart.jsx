@@ -16,7 +16,7 @@ const Cart = ({ navigation }) => {
     useEffect(() => {
         const user = auth.currentUser;
 
-        navigation.addListener('focus', async() => {
+        navigation.addListener('focus', async () => {
 
             const { uid } = user;
             const docRef = collection(db, `users/${uid}/cart`);
@@ -45,9 +45,9 @@ const Cart = ({ navigation }) => {
 
     useEffect(() => {
         const user = auth.currentUser;
-        
+
         if (user == null) { navigation.navigate('Home'); return }
-        
+
         const getData = async () => {
             const { uid } = user;
             setStateUid(uid);
@@ -80,6 +80,9 @@ const Cart = ({ navigation }) => {
 
     }, []);
 
+
+
+
     const callbackCartItem = async ({ type, name, count, index, cartItemIndex }) => {
 
 
@@ -87,13 +90,13 @@ const Cart = ({ navigation }) => {
             cartItems[cartItemIndex].add_ons[index].quantity = count;
             const docRef = doc(db, `users/${stateUid}/cart/`, cartItems[cartItemIndex].id);
             await updateDoc(docRef, {
-              add_ons:cartItems[cartItemIndex].add_ons,
+                add_ons: cartItems[cartItemIndex].add_ons,
             });
         } else if (type == 'product') {
             cartItems[cartItemIndex].quantity = count;
             const docRef = doc(db, `users/${stateUid}/cart/`, cartItems[cartItemIndex].id);
             await updateDoc(docRef, {
-              quantity:count,
+                quantity: count,
             });
         }
 
@@ -118,31 +121,36 @@ const Cart = ({ navigation }) => {
     }
 
     return (
-
         loading ? <View><Text>Loading</Text></View> :
+            <>
+                <ScrollView className="flex flex-1 bg-white px-2">
+                    <Text className="text-accent-dark font-bold text-5xl">Cart</Text>
 
-        <>
+                    {cartItems.length != 0
+                        ? cartItems.map((cartItem, index) => (
+                            <CartItemAccordion key={index} cartItem={cartItem} callbackCartItem={callbackCartItem} cartItemIndex={index} />
+                        ))
+                        : <Text className="text-2xl text-accent-dark">Your cart is empty!</Text>
+                    }
 
-            <ScrollView className="flex flex-1 bg-white px-2 mb-[calc(24%)]">
-                <Text className="text-accent-dark font-bold text-5xl">Cart</Text>
-
-                {cartItems && cartItems.map((cartItem, index) => (
-                    
-                    <CartItemAccordion key={index} cartItem={cartItem} callbackCartItem={callbackCartItem} cartItemIndex={index} />
-
-                ))}
-
-            </ScrollView>
+                </ScrollView>
 
 
-            <View className="absolute bottom-0 left-0 right-0 flex flex-col items-end justify-center px-5 bg-white shadow-lg h-[calc(15%)]">
-                <Text className="text-xl font-bold">Total Price: {totalPrice}</Text>
+                <View className="absolute bottom-0 left-0 right-0 flex flex-col items-end justify-center px-5 bg-white shadow-lg py-2 gap-y-1">
+                    <Text className="text-xl font-bold">Total Price: {totalPrice}</Text>
 
-                <TouchableOpacity className="flex py-2 px-2 bg-accent-default w-[50%] rounded-sm items-center justify-center bg-accent">
-                    <Text className="text-white text-xl">Check Out</Text>
-                </TouchableOpacity>
-            </View>
-        </>
+                    {cartItems.length == 0 ?
+                        <View className="flex py-2 px-2 bg-accent-dark/10 w-[50%] rounded-sm items-center justify-center">
+                         <Text className="text-accent-dark/70 text-xl">Cart is empty</Text>
+                        </View> :
+                        <TouchableOpacity onPress={() => { navigation.navigate('Checkout', { cartItems: cartItems, cartTotal: totalPrice }) }} className="flex py-2 px-2 bg-accent-default w-[50%] rounded-sm items-center justify-center">
+                            <Text className="text-white text-xl">Check Out</Text>
+                        </TouchableOpacity>
+                    }
+
+
+                </View>
+            </>
     )
 }
 
