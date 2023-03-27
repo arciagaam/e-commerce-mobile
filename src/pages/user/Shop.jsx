@@ -1,21 +1,14 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { db } from '../../firebase'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { ScrollView } from 'react-native-gesture-handler'
 const Shop = ({navigation, route}) => {
   const [products, setProducts] = useState([]);
-  const _DATA = [
-    {id:1, name: 'Product 1', description: 'Description 1', pricing: '220'},
-    {id:2, name: 'Product 2', description: 'Description 2', pricing: '220'},
-    {id:3, name: 'Product 3', description: 'Description 3', pricing: '220'},
-    {id:4, name: 'Product 4', description: 'Description 4', pricing: '220'},
-  ]
 
   const handleProductClick = (navigation, product_id) => {
     navigation.navigate('Product', {product_id:product_id});
   }
-
 
   useEffect(() => {
     const {collection_id} = route.params;
@@ -56,7 +49,9 @@ const Shop = ({navigation, route}) => {
 const ProductCard = ({product, handleProductClick, navigation}) => {
   return (
     <TouchableOpacity onPress={() => {handleProductClick(navigation, product.id)}} className="w-[49%] min-h-[100px] rounded-md mb-2 bg-white shadow-sm">
-      <View className="h-[100px] bg-red-100 rounded-md"></View>
+      <View className="h-[100px] bg-red-100 rounded-md">
+        <Image className="h-full w-full" source={{uri:product.images[product.images.length-1].url}}/>
+      </View>
       <View className="p-2 bg-white rounded-md">
         <Text className="text-lg font-bold">{product.name}</Text>
         <Text className="text-sm mt-2">{product.description}</Text>

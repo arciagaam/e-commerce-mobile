@@ -155,7 +155,7 @@ export default function App({ navigation }) {
       <NavigationContainer >
         <Drawer.Navigator id='main' initialRouteName="Home" screenOptions={({ navigation }) => ({ drawerActiveTintColor: '#DF687D', headerTintColor: '#DF687D', headerShadowVisible: false, headerRight: () => { if (state.userToken != null) return (<TouchableOpacity onPress={() => {navigation.dispatch(CommonActions.reset({index:0, routes:[{name:'CartStack'}]}))}} className="mr-4"><Text className="text-accent-default font-bold">Cart</Text></TouchableOpacity>) } })} >
           <Drawer.Screen name="Home" component={Home} />
-          <Drawer.Screen name="Shop Landing" component={ShopStackScreen} options={{ title: 'Shop' }} />
+          <Drawer.Screen name="ShopScreen" component={ShopStackScreen} options={{ title: 'Shop' }} />
           {state.userToken != null ? <Drawer.Screen name="ProfileTab" component={ProfileTabScreen} options={{ title: 'Profile', animationTypeForReplace: state.isSignout ? 'pop' : 'push', }} /> : <Drawer.Screen name="Authentication" options={{ title: 'Login / Register' }} component={AuthStackScreen} />}
           <Drawer.Screen name="CartStack"  component={CartStackScreen} options={{ title:'Cart', drawerItemStyle: { height: 0 }, headerTitle: '' }} />
         </Drawer.Navigator>

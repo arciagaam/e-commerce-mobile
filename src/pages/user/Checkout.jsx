@@ -27,9 +27,7 @@ const Checkout = ({ navigation, route }) => {
           user_id: uid
         }
         await addDoc(docRef, data);
-
-
-
+        navigation.pop();
         break;
 
       case 'paypal':

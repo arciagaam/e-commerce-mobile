@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import { auth } from '../../firebase'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../../firebase'
 import ColField from '../../components/ColField'
 import AuthContext from '../../authContext'
@@ -16,6 +16,7 @@ const Account = ({ navigation }) => {
     const [gender, setGender] = useState('')
     const [addresses, setAddresses] = useState([]);
 
+    const [orders, setOrders] = useState([]);
 
     const [userData, setUserData] = useState({});
     const [isEditing, setIsEditing] = useState(false);
@@ -40,7 +41,7 @@ const Account = ({ navigation }) => {
             case 'mobile': setMobile(value); break;
             case 'birthday': setBirthday(value); break;
             case 'gender': setGender(value); break;
-            
+
         }
     }
 
@@ -87,7 +88,21 @@ const Account = ({ navigation }) => {
 
                 setLoading(false)
             }
+
+            const getOrders = async () => {
+                const { uid } = user;
+                const docRef = collection(db, 'orders');
+                const q = query(docRef, where('user_id', '==', uid));
+                const docSnap = await getDocs(q);
+                const temp = [];
+                docSnap.forEach(snap => {
+                    temp.push({ ...snap.data(), id: snap.id });
+                })
+                setOrders(temp);
+            }
+
             getUser();
+            getOrders();
         }
     }, []);
 
@@ -110,7 +125,7 @@ const Account = ({ navigation }) => {
                             </Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity className="flex-1 justify-center items-center bg-accent-default py-4 rounded-md mt-5">
+                        <TouchableOpacity onPress={() => { signOut() }} className="flex-1 justify-center items-center bg-accent-default py-4 rounded-md mt-5">
                             <Text className="text-bold text-white">Sign Out</Text>
                         </TouchableOpacity>
                     </View>
@@ -132,7 +147,22 @@ const Account = ({ navigation }) => {
 
                 <View className="bg-white shadow-md px-5 py-3 rounded-lg mb-5">
                     <Text className="text-accent-dark text-3xl font-bold mb-5">Recent Orders</Text>
-                    <Text>ORDERS GO HERE</Text>
+
+                    <View className="rounded-md overflow-hidden">
+                        <View className="flex flex-row">
+                            <Text className="flex-1 bg-accent-default py-2 px-1 text-white">Order Date</Text>
+                            <Text className="flex-1 bg-accent-default py-2 px-1 text-white">Items</Text>
+                            <Text className="flex-1 bg-accent-default py-2 px-1 text-white">Order Status</Text>
+                        </View>
+                        {orders.length > 0 && orders.map((order, index) => (
+                            <TouchableOpacity key={index} className="flex flex-row bg-accent-light border-b border-accent-dark/10">
+                                <Text className="flex-1  py-2 px-1 text-accent-dark">{order.order_date.toDate().toLocaleDateString()}</Text>
+                                <Text className="flex-1  py-2 px-1 text-accent-dark">{order.products.length} Products</Text>
+                                <Text className="flex-1  py-2 px-1 text-accent-dark">{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
                 </View>
             </ScrollView>
     )
