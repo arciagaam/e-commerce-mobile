@@ -34,7 +34,7 @@ const Checkout = ({ navigation, route }) => {
         break;
     }
 
-    for(const cartItem of cartItems.current) {
+    for (const cartItem of cartItems.current) {
       const docRef = doc(db, `users/${uid}/cart`, cartItem.id);
       await deleteDoc(docRef);
     }
@@ -59,7 +59,7 @@ const Checkout = ({ navigation, route }) => {
               <Text className="mb-5 text-xl font-bold">Order Summary</Text>
 
               <View className="flex flex-row justify-between py-1">
-                <Text>Subtotal ({cartItems.current.length} Items)</Text>
+                <Text>Subtotal ({cartItems.current.length} {cartItems.current.length > 1 ? 'items' : 'item'})</Text>
                 <Text>₱ {route.params.cartTotal}</Text>
               </View>
 
@@ -99,7 +99,7 @@ const Checkout = ({ navigation, route }) => {
         </ScrollView>
 
         <View className="flex flex-row bg-white shadow-md py-2 px-3 justify-between items-end">
-          <Text>Total: ₱ {parseInt(route.params.cartTotal) + 100}</Text>
+          <Text className="text-2xl font-bold self-center">Total: ₱ {parseInt(route.params.cartTotal) + 100}</Text>
           <TouchableOpacity onPress={handlePlaceOrder} className="py-3 px-3 bg-accent-default rounded-sm w-1/2 items-center">
             <Text className="text-lg text-white">Place Order</Text>
           </TouchableOpacity>
@@ -133,9 +133,17 @@ const CheckoutItem = ({ cartItem, index, limit }) => {
           <View className="bg-white flex flex-col">
             <View className={`bg-white flex flex-col pl-5`}>
               <Text>Product Description Here</Text>
-              <Text>Inclusions: </Text>
+              {cartItem.inclusions.length != 0 &&
+                <View className="flex flex-col my-2">
+                  <Text className="font-bold">Inclusions: </Text>
+                  {cartItem.inclusions.map((inclusion, index) => (
+                    <Text key={index}>{inclusion}</Text>
+                  ))}
 
-              <Text>Add-ons:</Text>
+                </View>
+              }
+
+              <Text className="font-bold">Add-ons:</Text>
               {cartItem.add_ons && cartItem.add_ons.map((addon, index) => (
                 addon.quantity ?
                   <View key={index} className="flex flex-row gap-x-1">

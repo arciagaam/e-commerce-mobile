@@ -47,12 +47,9 @@ const ShopLanding = ({ navigation }) => {
 }
 
 const CollectionCard = ({ collection, handleSelectCollection, navigation }) => {
-    console.log(collection);
-
-
     return (
         <View className="flex flex-col aspect-square min-w-full">
-            <ImageBackground className='flex flex-col justify-end h-full' source={require('../../../assets/cat_bg.png')}>
+            <ImageBackground className='flex flex-col justify-end h-full bg-center' imageStyle={{resizeMode:'cover'}} source={ collection.image_url == null ? require('../../../assets/cat_bg.png') : {url:collection.image_url}}>
                 <View className="flex flex-col w-full items-center justify-center mt-auto bg-white py-5">
                     <View className="flex flex-col items-center justify-center">
                         <Text className="text-accent-dark font-bold text-2xl">{collection.title}</Text>

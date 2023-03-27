@@ -28,7 +28,7 @@ const Home = ({navigation}) => {
 
             <View className="pt-5 px-2">
                 <Text className="font-bold text-accent-dark text-7xl">Sinagtala.ph</Text>
-                <Text className="text-accent-dark text-2xl">Lorem ipsum dolor sit amet consectetur.</Text>
+                <Text className="text-accent-dark text-xl leading-[-5px]">Crochet your way to a blooming bouquet that never wilts, or go for the charm of everlasting beauty with our dried flower creations!</Text>
             </View>
             
             <Image className='h-[400px] aspect-square' source={require('./../../../assets/bg.png')} />

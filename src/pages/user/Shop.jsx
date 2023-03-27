@@ -12,8 +12,6 @@ const Shop = ({navigation, route}) => {
 
   useEffect(() => {
     const {collection_id} = route.params;
-    // const collection_id = 'DOeo6J1rGG9JeD7fT2G6';
-
     const getData = async () => {
       const docRef = collection(db, 'products');
       const q = query(docRef, where('collection', '==', collection_id));
@@ -27,16 +25,12 @@ const Shop = ({navigation, route}) => {
       setProducts(temp);
     }
 
-    // setProducts(_DATA);
     getData();
     navigation.getParent('main').setOptions({swipeEnabled:false, headerShown:false})
   }, [])
 
   return (
-    <ScrollView className="bg-white flex flex-1 px-2 pt-1 gap-y-2">
-      <View className="bg-red-100 w-full h-[175px] rounded-md shadow-sm">
-      </View>
-
+    <ScrollView className="bg-white flex flex-1 px-2 pt-2 gap-y-2">
       <View className="flex flex-row flex-wrap flex-start justify-between">
         {products && products.map((product, index) => (
           <ProductCard key={index} product={product} handleProductClick={handleProductClick} navigation={navigation}/>
